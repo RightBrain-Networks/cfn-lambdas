@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: AvailabilityZoneList Custom Logic Stack
+Parameters:
+  CloudToolsBucket:
+    Type: String
+    Description: Name of S3 bucket containing CloudTools artifacts
+  Release:
+    Type: String
+    Description: Release version
+Resources:
+  Lambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Handler: lambda_function.lambda_handler
+      Role: !GetAtt 'LambdaRole.Arn'
+      Code:
+        S3Bucket: !Ref 'CloudToolsBucket'
+        S3Key: !Sub '${Release}/custom_logic/availability_zone_list.zip'
+      Timeout: '60'
+      Runtime: python3.7
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Effect: Allow
+  LambdaPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: EnableCustomLogic
+      Roles:
+        - !Ref 'LambdaRole'
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ec2:DescribeAvailabilityZones
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Effect: Allow
+            Resource: '*'
+Outputs:
+  LambdaArn:
+    Description: ARN of the AvailabilityZoneList Lambda function
+    Value: !GetAtt 'Lambda.Arn'
