@@ -1,7 +1,7 @@
 #!/usr/bin/env python3.7
 import json
 import boto3
-import urllib2
+import urllib.request
 from cfnresponse import send, SUCCESS,FAILED
 import logging
 from optparse import OptionParser
