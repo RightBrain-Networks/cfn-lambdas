@@ -4,6 +4,15 @@
 
 This repository is home to various lambdas that assists in building networks on AWS.
 
+## Lambda's Included
+
+- [allocate_subnet_cidr](allocate_subnet_cidr)
+- [attach_hosted_zone](attach_hosted_zone)
+- [availability_zone_list](availability_zone_list)
+- [number_azs](number_azs)
+- [peer_vpcs](peer_vpcs)
+- [vpc_cidr](vpc_cidr)
+
 ## Building Zip Archives
 
 ### Installing Requirements
