@@ -48,4 +48,14 @@ To create a lambda function for the custom resource, your package must be locate
 
 ### Output
 
-The output of this custom resource is a list of availability zones in a specified region
+The output of this custom resource is a list of availability zones in a specified region as attributes
+
+#### !Ref Output
+
+The number of AZs
+
+#### Output Attributes
+
+`Length` The number of zones
+
+`Zones` A list of the availability zones

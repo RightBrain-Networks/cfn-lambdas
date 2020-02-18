@@ -1,6 +1,6 @@
 # allocate_subnet_cidr
 
-The `allocate_subnet_cidr` lambda takes in a VPC cidr and outputs a subnet cidr.
+The `allocate_subnet_cidr` lambda takes in a VPC cidr and outputs a number of subnet cidrs.
 
 This lambda that is part RightBrain Networks' [cfn-lambdas](https://github.com/RightBrain-Networks/cfn-lambda).
 
@@ -49,3 +49,7 @@ To create a lambda function for the custom resource, your package must be locate
 ### Output
 
 The output of this custom resource is the subnet cidr
+
+#### !Ref Output
+
+The generated subnet Cidr

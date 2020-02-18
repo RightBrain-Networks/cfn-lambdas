@@ -1,6 +1,6 @@
 # vpc_cidr
 
-The `vpc_cidr` lambda that generates a VPC cidr.
+The `vpc_cidr` lambda that generates a VPC cidr based on the input Global CIDR, finds a CIDR with the maskbit that's not already used in this AWS account.
 
 This lambda that is part RightBrain Networks' [cfn-lambdas](https://github.com/RightBrain-Networks/cfn-lambda).
 
@@ -46,9 +46,12 @@ To create a lambda function for the custom resource, your package must be locate
         Reserved: # Cidr range it cannot pick in
         GlobalCidr:  # The global cidr
         MaskBit: # The bit mask for the cidr to use
-        Profile: # AWS Profile
 ```
 
 ### Output
 
 The output of this custom resource is a Vpc Cidr
+
+#### !Ref Output
+
+The generated Vpc Cidr

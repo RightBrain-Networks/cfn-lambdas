@@ -1,6 +1,6 @@
 # peer_vpcs
 
-The `peer_vpcs` lambda that peers vpc based upon the `Environment` tag.
+The `peer_vpcs` lambda that finds a peer vpc using the `Environment` tag.
 
 This lambda that is part RightBrain Networks' [cfn-lambdas](https://github.com/RightBrain-Networks/cfn-lambda).
 
@@ -44,10 +44,24 @@ To create a lambda function for the custom resource, your package must be locate
     Type: Custom::PeerVpcs
     Properties:
         Environment: # Name of Environment tag of VPCs to peer
-        Profile: # AWS Profile
-        Region: # AWS Region
 ```
 
 ### Output
 
 The output of this custom resource is a VpcId of the peered VPC.
+
+#### !Ref Output
+
+The VpcId of the peer vpc.
+
+#### Output Attributes
+
+`[TAG PREFIX].RouteTableId` The route table found by the prefix of its tags (ex. `dev` in `dev-project`) for the peer vpc
+
+`[TAG PREFIX].NetworkAclId` The NACL found by the prefix of its tags (ex. `dev` in `dev-project`) for the peer vpc
+
+`OpenRuleNumber` Number of rules checked in the NACLs
+
+`VpcId` The ID of the peer vpc
+
+`VpcCidr` The CIDR of the peer vpc

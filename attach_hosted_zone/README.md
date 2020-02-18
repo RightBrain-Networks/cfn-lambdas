@@ -45,6 +45,8 @@ To create a lambda function for the custom resource, your package must be locate
     Properties:
         HostedZoneId: # HOSTED ZONE TO ATTACH
         VpcId: # VPC Id
-        Profile: # AWS Profile
-        Region: # AWS Region
 ```
+
+### Output
+
+This resource has no output

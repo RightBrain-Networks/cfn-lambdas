@@ -22,7 +22,7 @@ def lambda_handler(event, context=None, profile=None):
         zones = get_availability_zones(client)
         if context:
             length = 4 if len(zones) > 4 else len(zones)
-            response_data = {'Lenght': length, 'Zones': zones[:length]}
+            response_data = {'Length': length, 'Zones': zones[:length]}
             send(event, context, SUCCESS, response_data, str(int(length)))
         else:
             print(str(len(zones)))
