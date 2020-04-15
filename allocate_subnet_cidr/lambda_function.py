@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 import json
 import urllib
 from netaddr import IPSet, IPNetwork
@@ -20,26 +20,44 @@ def lambda_handler(event, context):
     try:
         cidr = event['ResourceProperties']['VpcCidr']
         azs = event['ResourceProperties']['AZs']
+        sub_types = event['ResourceProperties'].get('SubnetTypes', 'Public,Private').split(',')
+        number_of_types = len(sub_types)
         ip_network = IPNetwork(cidr)
         mask = cidr.split("/")
-        increment = 2
-        if int(azs) >= 3:
-            increment = 3
+
+        number_of_subnets = int(azs) * int(number_of_types)
+        split_num = 1
+        increment = 0
+        while split_num < number_of_subnets:
+            split_num = split_num * 2
+            increment = increment + 1
+
         slash = int(mask[1])+int(increment)
         subnets = ip_network.subnet(slash)
-        half = len(list(subnets))/2
+
         result = {}
-        count = 1
-        for subnet in ip_network.subnet(slash):
-            if int(count) <= int(half):
-                key = "PublicSubnetAz" + str(int(count))
-                result[key] = str(subnet)
-            else:
-                key = "PrivateSubnetAz" + str(int(count-half))
-                result[key] = str(subnet)
-            count= count + 1
+        keys = []
+
+        #create keys/headings for PublicSubnetAZ, PublicSubnetAZ etc
+
+        for sub_type in sub_types:
+            for i in range(1,int(azs)+1):
+                ky = (sub_type+"SubnetAz"+str(i)).strip()
+                keys.append(str(ky))
+
+
+        #loop through subnets and match the keys
+        ct = 0
+        for elem in subnets:
+            if ct < len(keys):
+                key = str(keys[ct])
+                result[key] = str(elem)
+            ct = ct+1
+
+        print(result)
+
         if context:
-            send(event, context, SUCCESS, result)
+            send(event, context, SUCCESS, None, result, None)
         else:
             print(result)
     except Exception as e:
@@ -54,6 +72,8 @@ if __name__ == "__main__":
     usage = "usage: %prog [options]"
     parser = OptionParser(usage=usage)
     parser.add_option("-c","--cidr", help="Cidr Range to divide out.")
+    parser.add_option("-a","--az", help="Number of Azs.")
+    parser.add_option("-t","--types", default='Public,Private,Data', help="Number of Azs.")
     (opts, args) = parser.parse_args()
     options_broken = False
     if not opts.cidr:
@@ -62,5 +82,5 @@ if __name__ == "__main__":
         parser.print_help()
         exit(1)
 
-    event = { 'ResourceProperties': { 'VpcCidr': opts.cidr } }
+    event = { 'ResourceProperties': { 'VpcCidr': opts.cidr, 'AZs': opts.az, 'SubnetTypes': opts.types } }
     lambda_handler(event, None)
