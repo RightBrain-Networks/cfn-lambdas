@@ -23,12 +23,12 @@ def lambda_handler(event, context=None, profile=None):
         if context:
             length = 4 if len(zones) > 4 else len(zones)
             response_data = {'Length': length, 'Zones': zones[:length]}
-            send(event, context, SUCCESS, response_data, str(int(length)))
+            send(event, context, SUCCESS, result, str('None'))
         else:
             print(str(len(zones)))
     except Exception as e:
         logger.error(e)
-        context and send(event, context, FAILED, str(e))
+            send(event, context, FAILED, str(e), str(e))
         raise e
     return
 
